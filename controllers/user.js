@@ -35,7 +35,6 @@ function initPassport(passport) {
     }
     try {
       if (await bcrypt.compare(password, user.password)) {
-        console.log("LOGGED IN");
         return done(null, user);
       } else {
         return done(null, false, { message: "wrong password" });
@@ -46,7 +45,6 @@ function initPassport(passport) {
   };
   passport.use(new LocalStrategy({ usernameField: "email" }, authenticateUser));
   passport.serializeUser((user, done) => {
-    console.log("SEREALIZED");
     done(null, user._id);
   });
   passport.deserializeUser(async (id, done) => {

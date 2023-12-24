@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const session = require("express-session");
-const { getUsers, initPassport } = require("../controllers/user.js");
+const { getUsers, initPassport, createUser } = require(
+  "../controllers/user.js",
+);
 
 initPassport(passport);
 router.use(express.json());
@@ -14,13 +16,13 @@ router.use(session({
 router.use(passport.initialize());
 router.use(passport.session());
 
-// Features:
-// 1. login users - POST methos on login
-// 2. create users - POST method on signup
-router.get("/check", (req, res) => {
-  res.json({ message: req.isAuthenticated(), user: req.user });
-});
-router.get("/", getUsers);
+
+// ONLY FOR DEVELOPMENT, REMOVE AT PRODUCTION
+router.get("/users", getUsers);
+
+router.post("/signup", createUser);
+router.post("/login", passport.authenticate("local"));
+
 router.post("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) {
@@ -30,16 +32,9 @@ router.post("/logout", (req, res, next) => {
   });
 });
 
-router.post(
-  "/",
-  passport.authenticate("local"),
-);
-function checkAuth(req, res, next) {
-  if (req.isAuthenticated()) {
-    res.json({ message: "yes, logged in" });
-    return next();
-  }
-  res.json({ message: "not logged in" });
-}
+router.get("/checkuser", (req, res) => {
+  res.json({ message: req.isAuthenticated(), user: req.user });
+});
+
 
 module.exports = router;
