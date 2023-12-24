@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
   try {
@@ -11,10 +12,11 @@ const getUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = new User({
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      password: hashedPassword,
     });
     const result = await user.save();
     res.status(201).json(result);
@@ -23,8 +25,38 @@ const createUser = async (req, res) => {
   }
 };
 
-const loginUser = async(req, res) => {
-
+// PASSPORTJS CONFIG
+const LocalStrategy = require("passport-local").Strategy;
+function initPassport(passport) {
+  const authenticateUser = async (email, password, done) => {
+    const user = await User.findOne({ email: email });
+    if (user == null) {
+      return done(null, false, { message: "email not found" });
+    }
+    try {
+      if (await bcrypt.compare(password, user.password)) {
+        console.log("LOGGED IN");
+        return done(null, user);
+      } else {
+        return done(null, false, { message: "wrong password" });
+      }
+    } catch (err) {
+      return done(err);
+    }
+  };
+  passport.use(new LocalStrategy({ usernameField: "email" }, authenticateUser));
+  passport.serializeUser((user, done) => {
+    console.log("SEREALIZED");
+    done(null, user._id);
+  });
+  passport.deserializeUser(async (id, done) => {
+    try {
+      const user = await User.findOne({ _id: id });
+      done(null, user);
+    } catch (err) {
+      done(err);
+    }
+  });
 }
-
-module.exports = { getUsers, createUser };
+// PASSPORTJS CONFIG ENDS
+module.exports = { getUsers, createUser, initPassport };
