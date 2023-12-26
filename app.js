@@ -2,7 +2,8 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-
+const cors = require("cors");
+app.use(cors({ origin: true, credentials: true }));
 
 mongoose.connect(process.env.MONGO_URL);
 const db = mongoose.connection;
@@ -12,6 +13,5 @@ db.once("open", () => console.log("connected to DB"));
 
 const userRoute = require("./routes/user");
 app.use("/", userRoute);
-
 
 app.listen(3000);
