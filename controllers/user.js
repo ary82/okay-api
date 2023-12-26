@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find({}, { username: 1, _id: 0 });
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -57,4 +57,19 @@ function initPassport(passport) {
   });
 }
 // PASSPORTJS CONFIG ENDS
-module.exports = { getUsers, createUser, initPassport };
+
+const logoutUser = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    res.json({ message: "Already logged out" });
+    return next();
+  }
+  req.logout((err) => {
+    if (err) {
+      res.json({ message: err });
+      return next(err);
+    }
+    res.json({ message: "logged out" });
+  });
+};
+
+module.exports = { getUsers, createUser, initPassport, logoutUser };
