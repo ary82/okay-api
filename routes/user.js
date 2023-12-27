@@ -21,17 +21,16 @@ router.get("/users", getUsers);
 
 router.post("/signup", createUser);
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  res.json({ message: "logged in", username: req.user.username });
+  res.json({ success: true, username: req.user.username });
 });
 
 router.post("/logout", logoutUser);
 
 router.get("/checkuser", (req, res) => {
   if (!req.isAuthenticated()) {
-    res.send(false);
+    res.json({ loggedIn: false, username: "" });
   }
-  res.send(req.user);
-  res.json({ message: req.isAuthenticated(), user: req.user });
+  res.json({ loggedIn: true, username: req.user.username });
 });
 
 module.exports = router;

@@ -60,7 +60,7 @@ function initPassport(passport) {
 
 const logoutUser = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    res.json({ message: "Already logged out" });
+    res.json({ wasLoggedIn: false, message: "Already logged out" });
     return next();
   }
   req.logout((err) => {
@@ -68,7 +68,7 @@ const logoutUser = (req, res, next) => {
       res.json({ message: err });
       return next(err);
     }
-    res.json({ message: "logged out" });
+    res.json({ wasLoggedIn: true, message: "logged out" });
   });
 };
 
