@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find({}, { username: 1, _id: 0 });
+    const users = await User.find({}, { username: 1 });
     res.json(users);
   } catch (err) {
     res.status(500).json({ message: err.message });
