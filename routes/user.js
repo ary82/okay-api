@@ -29,8 +29,9 @@ router.post("/logout", logoutUser);
 router.get("/checkuser", (req, res) => {
   if (!req.isAuthenticated()) {
     res.json({ loggedIn: false, username: "" });
+  } else {
+    res.json({ loggedIn: true, username: req.user.username });
   }
-  res.json({ loggedIn: true, username: req.user.username });
 });
 
 module.exports = router;
