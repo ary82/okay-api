@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Room = require("../models/room");
 const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
@@ -17,6 +18,13 @@ const createUser = async (req, res) => {
       username: req.body.username,
       email: req.body.email,
       password: hashedPassword,
+    });
+    const users = await User.find();
+    users.map(async (user) => {
+      const room = new Room({
+        users: `${req.body.username}${user.username}`,
+      });
+      await room.save();
     });
     const result = await user.save();
     res.status(201).json(result);
