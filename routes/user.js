@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
@@ -9,7 +10,7 @@ const { getUsers, initPassport, createUser, logoutUser } = require(
 initPassport(passport);
 router.use(express.json());
 router.use(session({
-  secret: "efdsvesrvrev",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: { maxAge: 864000000 },
