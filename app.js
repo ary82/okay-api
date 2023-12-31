@@ -20,6 +20,13 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log(socket.id);
+  socket.on("message", (message, room) => {
+    console.log(`Received from socket: ${message}`);
+    socket.to(room).emit("receive-message", message);
+  });
+  socket.on("join-room", (room) => {
+    socket.join(room);
+  });
 });
 
 instrument(io, {
@@ -35,8 +42,10 @@ db.once("open", () => console.log("connected to DB"));
 // ROUTES
 const userRoute = require("./routes/user");
 const messageRoute = require("./routes/message");
+const roomRoute = require("./routes/room");
 app.use("/", userRoute);
 app.use("/", messageRoute);
+app.use("/", roomRoute);
 
 // app.listen(3000);
 httpServer.listen(3000);

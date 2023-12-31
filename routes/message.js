@@ -20,8 +20,10 @@ router.post("/message/send", async (req, res) => {
 router.post("/conversation", async (req, res) => {
   try {
     const conversation = await Message.find({
-      from: req.body.from,
-      to: req.body.to,
+      $or: [{ from: req.body.from, to: req.body.to }, {
+        from: req.body.to,
+        to: req.body.from,
+      }],
     }).sort({ createdAt: -1 }).limit(20);
     res.status(200).send(conversation);
   } catch (err) {

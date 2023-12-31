@@ -22,7 +22,7 @@ const createUser = async (req, res) => {
     const users = await User.find();
     users.map(async (user) => {
       const room = new Room({
-        users: `${req.body.username}${user.username}`,
+        users: `${req.body.username} ${user.username}`,
       });
       await room.save();
     });
