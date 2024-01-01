@@ -46,9 +46,11 @@ db.once("open", () => console.log("connected to DB"));
 const userRoute = require("./routes/user");
 const messageRoute = require("./routes/message");
 const roomRoute = require("./routes/room");
+const aiRoute = require("./routes/gemini");
 app.use("/", userRoute);
 app.use("/", messageRoute);
 app.use("/", roomRoute);
+app.use("/", aiRoute);
 
 // app.listen(3000);
 httpServer.listen(3000);
