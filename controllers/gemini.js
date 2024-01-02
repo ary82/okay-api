@@ -23,18 +23,7 @@ const postAImessage = async (req, res) => {
     // Get AI Response
     const aiResponse = await runGemini(str);
 
-    // Save message
-    const message = new Message({
-      from: req.user.username,
-      to: req.body.to,
-      message: aiResponse,
-    });
-    const result = await message.save();
-
-    res.status(200).json({
-      aiResponse,
-      newMessage: result,
-    });
+    res.status(200).send(aiResponse);
   } catch (err) {
     console.log(err);
   }

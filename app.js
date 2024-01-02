@@ -20,9 +20,9 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log(socket.id);
-  socket.on("message", (message, room) => {
+  socket.on("message", (message, room, from) => {
     console.log(`Received from socket: ${message}`);
-    socket.to(room).emit("receive-message", message);
+    socket.to(room).emit("receive-message", message, crypto.randomUUID(), from);
   });
   socket.on("join-room", (room) => {
     socket.join(room);
