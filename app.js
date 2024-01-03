@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const { Server } = require("socket.io");
-const { instrument } = require("@socket.io/admin-ui");
 const { createServer } = require("http");
 
 app.use(cors({ origin: true, credentials: true }));
@@ -31,11 +30,6 @@ io.on("connection", (socket) => {
   socket.on("leave-room", (room) => {
     socket.leave(room);
   });
-});
-
-instrument(io, {
-  auth: false,
-  mode: "development",
 });
 
 mongoose.connect(process.env.MONGO_URL);
