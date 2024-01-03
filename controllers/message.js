@@ -19,7 +19,7 @@ const getConversation = async (req, res) => {
         from: req.params.to,
         to: req.params.from,
       }],
-    }).sort({ createdAt: -1 }).limit(20);
+    }).sort({ createdAt: -1 }).limit(30);
     res.status(200).send(conversation);
   } catch (err) {
     res.status(500).json({ messge: err.message });
