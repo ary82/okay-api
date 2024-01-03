@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const port = process.env.PORT || 3000;
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -53,4 +54,4 @@ app.use("/", roomRoute);
 app.use("/", aiRoute);
 
 // app.listen(3000);
-httpServer.listen(3000);
+httpServer.listen(port);
