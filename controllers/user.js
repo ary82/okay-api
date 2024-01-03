@@ -20,11 +20,13 @@ const createUser = async (req, res) => {
       password: hashedPassword,
     });
     const users = await User.find();
-    users.map(async (user) => {
-      const room = new Room({
-        users: `${req.body.username} ${user.username}`,
-      });
-      await room.save();
+    users.map(async (user, index, array) => {
+      if (array.length >= 1) {
+        const room = new Room({
+          users: `${req.body.username} ${user.username}`,
+        });
+        await room.save();
+      }
     });
     const result = await user.save();
     res.status(201).json(result);
