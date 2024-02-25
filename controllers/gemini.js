@@ -1,4 +1,4 @@
-const Message = require("../models/message");
+const Message = require("../models/message.js");
 const { runGemini } = require("./gemini-config.js");
 const postAImessage = async (req, res) => {
   try {

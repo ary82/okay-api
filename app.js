@@ -38,10 +38,10 @@ db.on("error", (e) => console.log(e));
 db.once("open", () => console.log("connected to DB"));
 
 // ROUTES
-const userRoute = require("./routes/user");
-const messageRoute = require("./routes/message");
-const roomRoute = require("./routes/room");
-const aiRoute = require("./routes/gemini");
+const userRoute = require("./routes/user.js");
+const messageRoute = require("./routes/message.js");
+const roomRoute = require("./routes/room.js");
+const aiRoute = require("./routes/gemini.js");
 app.use("/", userRoute);
 app.use("/", messageRoute);
 app.use("/", roomRoute);

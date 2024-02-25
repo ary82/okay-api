@@ -1,5 +1,5 @@
-const User = require("../models/user");
-const Room = require("../models/room");
+const User = require("../models/user.js");
+const Room = require("../models/room.js");
 const bcrypt = require("bcrypt");
 
 const getUsers = async (req, res) => {
