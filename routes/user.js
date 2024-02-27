@@ -6,6 +6,7 @@ const session = require("express-session");
 const { getUsers, initPassport, createUser, logoutUser } = require(
   "../controllers/user.js",
 );
+const MongoStore = require('connect-mongo')(session);
 
 initPassport(passport);
 router.use(express.json());
@@ -13,7 +14,12 @@ router.use(session({
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 864000000 },
+  saveUninitialized: true,
+  store: new MongoStore({
+    url: `${process.env.MONGO_URL}`, //YOUR MONGODB URL
+    ttl: 14 * 24 * 60 * 60,
+    autoRemove: 'native'
+  })
 }));
 router.use(passport.initialize());
 router.use(passport.session());
