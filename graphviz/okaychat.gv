@@ -1,0 +1,43 @@
+digraph G {
+  // Config
+  bgcolor=transparent
+  rankdir="LR";
+  graph [fontsize=12 fontname="HackNerdFont" style=filled color=gray];
+  node [fontsize=12 fontname="HackNerdFont" shape=box style=filled color=white];
+
+  // Defining Subgraphs and Nodes
+  subgraph cluster_frontend {
+    label = "Frontend";
+
+    subgraph cluster_vercel {
+    color=lightgray;
+    label = "Vercel";
+    "React Frontend"
+    }
+  }
+  subgraph cluster_backend {
+    label = "Backend";
+
+    subgraph cluster_ec2 {
+    color=lightgray;
+    label = "AWS EC2 Instance";
+    "Nginx" "Node API";
+    }
+  }
+  subgraph cluster_database {
+    label = "Database";
+
+    subgraph cluster_mongo {
+    color=lightgray;
+    label = "MongoDB Atlas";
+    "Rooms" "Sessions" "Messages" "Users"
+    }
+  }
+  // Connections
+  "React Frontend" -> Nginx;
+  "Nginx" -> "Node API";
+  "Node API" -> "Rooms"
+  "Node API" -> "Sessions"
+  "Node API" -> "Messages"
+  "Node API" -> "Users"
+}

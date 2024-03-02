@@ -3,24 +3,28 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const session = require("express-session");
-const { getUsers, initPassport, createUser, logoutUser } = require(
-  "../controllers/user.js",
-);
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require("connect-mongo");
+const {
+  getUsers,
+  initPassport,
+  createUser,
+  logoutUser,
+} = require("../controllers/user.js");
 
 initPassport(passport);
 router.use(express.json());
-router.use(session({
-  secret: process.env.SECRET,
-  resave: false,
-  saveUninitialized: false,
-  saveUninitialized: true,
-  store: new MongoStore({
-    url: `${process.env.MONGO_URL}`, //YOUR MONGODB URL
-    ttl: 14 * 24 * 60 * 60,
-    autoRemove: 'native'
-  })
-}));
+router.use(
+  session({
+    secret: process.env.SECRET,
+    resave: true,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: `${process.env.MONGO_URL}`,
+      ttl: 14 * 24 * 60 * 60,
+      autoRemove: "native",
+    }),
+  }),
+);
 router.use(passport.initialize());
 router.use(passport.session());
 
