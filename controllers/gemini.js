@@ -10,7 +10,7 @@ const postAImessage = async (req, res) => {
     }).sort({ createdAt: -1 }).limit(5);
 
     let str = "";
-    conversation.toReversed().map((item) => {
+    conversation.slice().reverse().map((item) => {
       console.log(item.message);
       if (item.from == req.user.username) {
         str += `B: ${item.message}\n`;

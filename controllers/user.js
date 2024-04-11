@@ -59,7 +59,7 @@ function initPassport(passport) {
   });
   passport.deserializeUser(async (id, done) => {
     try {
-      const user = await User.findById(id);
+      const user = await User.findOne({ _id: id });
       done(null, user);
     } catch (err) {
       done(err);

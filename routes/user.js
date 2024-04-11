@@ -3,28 +3,23 @@ const express = require("express");
 const router = express.Router();
 const passport = require("passport");
 const session = require("express-session");
+const { getUsers, initPassport, createUser, logoutUser } = require(
+  "../controllers/user.js",
+);
 const MongoStore = require("connect-mongo");
-const {
-  getUsers,
-  initPassport,
-  createUser,
-  logoutUser,
-} = require("../controllers/user.js");
 
 initPassport(passport);
 router.use(express.json());
-router.use(
-  session({
-    secret: process.env.SECRET,
-    resave: true,
-    saveUninitialized: false,
-    store: MongoStore.create({
-      mongoUrl: `${process.env.MONGO_URL}`,
-      ttl: 14 * 24 * 60 * 60,
-      autoRemove: "native",
-    }),
+router.use(session({
+  secret: process.env.SECRET,
+  resave: true,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: `${process.env.MONGO_URL}`,
+    ttl: 14 * 24 * 60 * 60,
+    autoRemove: "native",
   }),
-);
+}));
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -38,10 +33,10 @@ router.post("/login", passport.authenticate("local"), (req, res) => {
 router.post("/logout", logoutUser);
 
 router.get("/checkuser", (req, res) => {
-  if (!req.isAuthenticated()) {
-    res.json({ loggedIn: false, username: "" });
-  } else {
+  if (req.isAuthenticated()) {
     res.json({ loggedIn: true, username: req.user.username });
+  } else {
+    res.json({ loggedIn: false, username: "" });
   }
 });
 
